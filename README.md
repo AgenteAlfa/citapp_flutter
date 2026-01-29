@@ -63,3 +63,15 @@ Esta conexion abierto al consumo, solo requiere sus credenciales de acceso
 
 ## Configuración ubicada en:
  lib/config/api_config.dart
+
+## Instalacion 
+ flutter pub get
+
+## Ejecucion chrome
+ flutter run -d chrome
+
+## Compilar para apk
+ flutter build apk --release
+
+## Compilacion web disponible
+ https://workspace1.cerobits.com

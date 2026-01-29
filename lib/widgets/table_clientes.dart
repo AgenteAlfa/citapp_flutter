@@ -73,7 +73,7 @@ class ClientesTable extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Cliente + info extra debajo cuando se ocultan columnas
+                    // Cliente
                     Expanded(
                       flex: 3,
                       child: Column(
