@@ -14,6 +14,7 @@ class DashboardBox extends StatelessWidget {
   final int count;
   final String? label;
   final double minWidth;
+  final double maxWidth;
   final VoidCallback? onTap;
   final bool isSelected;
 
@@ -22,7 +23,8 @@ class DashboardBox extends StatelessWidget {
     required this.type,
     required this.count,
     this.label,
-    this.minWidth = 180,
+    this.minWidth = 100,
+    this.maxWidth = 120,
     this.onTap,
     this.isSelected = false,
   });
@@ -36,7 +38,7 @@ class DashboardBox extends StatelessWidget {
         isSelected ? meta.color : meta.color.withAlpha((.88 * 255).round());
 
     final content = Container(
-      constraints: BoxConstraints(minWidth: minWidth, maxWidth: 200),
+      constraints: BoxConstraints(minWidth: minWidth, maxWidth: maxWidth),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: bgColor,

@@ -204,30 +204,44 @@ class _ClientesPanelState extends State<ClientesPanel> {
               child: Text(_error!, style: const TextStyle(color: Colors.red)),
             ),
 
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              DashboardBox(
-                type: DashboardBoxTipe.clientesActivos,
-                count: _countActivos,
-                isSelected: _filtro == ClientesFiltro.activos,
-                onTap: () => setState(() => _filtro = ClientesFiltro.activos),
-              ),
-              DashboardBox(
-                type: DashboardBoxTipe.clientesInactivos,
-                count: _countInactivos,
-                isSelected: _filtro == ClientesFiltro.inactivos,
-                onTap: () => setState(() => _filtro = ClientesFiltro.inactivos),
-              ),
-              DashboardBox(
-                type: DashboardBoxTipe.citasPendientes,
-                label: 'Todos',
-                count: _clientes.length,
-                isSelected: _filtro == ClientesFiltro.todos,
-                onTap: () => setState(() => _filtro = ClientesFiltro.todos),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final maxBoxWidth = constraints.maxWidth * 4 / 10;
+
+              return Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.clientesActivos,
+                    count: _countActivos,
+                    isSelected: _filtro == ClientesFiltro.activos,
+                    onTap:
+                        () => setState(() => _filtro = ClientesFiltro.activos),
+                  ),
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.clientesInactivos,
+                    count: _countInactivos,
+                    isSelected: _filtro == ClientesFiltro.inactivos,
+                    onTap:
+                        () =>
+                            setState(() => _filtro = ClientesFiltro.inactivos),
+                  ),
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.citasPendientes,
+                    label: 'Todos',
+                    count: _clientes.length,
+                    isSelected: _filtro == ClientesFiltro.todos,
+                    onTap: () => setState(() => _filtro = ClientesFiltro.todos),
+                  ),
+                ],
+              );
+            },
           ),
 
           const SizedBox(height: 14),
@@ -243,24 +257,22 @@ class _ClientesPanelState extends State<ClientesPanel> {
                 child: Column(
                   children: [
                     Row(
-                      spacing: 20,
+                      //crossAxisAlignment: WrapCrossAlignment.center,
+                      //alignment: WrapAlignment.end,
+                      spacing: 4,
                       children: [
-                        const Text(
-                          'Clientes',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
                         Expanded(
-                          child: TextField(
-                            onChanged: (v) => setState(() => _search = v),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              hintText: 'Buscar...',
-                              prefixIcon: const Icon(Icons.search, size: 18),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(22),
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 300),
+                            child: TextField(
+                              onChanged: (v) => setState(() => _search = v),
+                              decoration: InputDecoration(
+                                isDense: true,
+                                hintText: 'Buscar...',
+                                prefixIcon: const Icon(Icons.search, size: 18),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
                               ),
                             ),
                           ),

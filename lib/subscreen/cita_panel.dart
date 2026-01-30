@@ -218,36 +218,51 @@ class _CitasPanelState extends State<CitasPanel> {
               child: Text(_error!, style: const TextStyle(color: Colors.red)),
             ),
 
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              DashboardBox(
-                type: DashboardBoxTipe.citasPendientes,
-                count: _countPendientes,
-                isSelected: _filtro == CitasFiltro.pendientes,
-                onTap: () => setState(() => _filtro = CitasFiltro.pendientes),
-              ),
-              DashboardBox(
-                type: DashboardBoxTipe.citasConfirmadas,
-                count: _countConfirmadas,
-                isSelected: _filtro == CitasFiltro.confirmadas,
-                onTap: () => setState(() => _filtro = CitasFiltro.confirmadas),
-              ),
-              DashboardBox(
-                type: DashboardBoxTipe.citasRechazadas,
-                count: _countRechazadas,
-                isSelected: _filtro == CitasFiltro.rechazadas,
-                onTap: () => setState(() => _filtro = CitasFiltro.rechazadas),
-              ),
-              DashboardBox(
-                type: DashboardBoxTipe.clientesActivos,
-                label: 'Todas',
-                count: _citas.length,
-                isSelected: _filtro == CitasFiltro.todos,
-                onTap: () => setState(() => _filtro = CitasFiltro.todos),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final maxBoxWidth = constraints.maxWidth * 4 / 10; // = 2/5
+
+              return Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.citasPendientes,
+                    count: _countPendientes,
+                    isSelected: _filtro == CitasFiltro.pendientes,
+                    onTap:
+                        () => setState(() => _filtro = CitasFiltro.pendientes),
+                  ),
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.citasConfirmadas,
+                    count: _countConfirmadas,
+                    isSelected: _filtro == CitasFiltro.confirmadas,
+                    onTap:
+                        () => setState(() => _filtro = CitasFiltro.confirmadas),
+                  ),
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.citasRechazadas,
+                    count: _countRechazadas,
+                    isSelected: _filtro == CitasFiltro.rechazadas,
+                    onTap:
+                        () => setState(() => _filtro = CitasFiltro.rechazadas),
+                  ),
+                  DashboardBox(
+                    maxWidth: maxBoxWidth,
+                    type: DashboardBoxTipe.clientesActivos,
+                    label: 'Todas',
+                    count: _citas.length,
+                    isSelected: _filtro == CitasFiltro.todos,
+                    onTap: () => setState(() => _filtro = CitasFiltro.todos),
+                  ),
+                ],
+              );
+            },
           ),
 
           const SizedBox(height: 14),
@@ -263,15 +278,8 @@ class _CitasPanelState extends State<CitasPanel> {
                 child: Column(
                   children: [
                     Row(
-                      spacing: 20,
+                      spacing: 10,
                       children: [
-                        const Text(
-                          'Citas',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
                         Expanded(
                           child: TextField(
                             onChanged: (v) => setState(() => _search = v),

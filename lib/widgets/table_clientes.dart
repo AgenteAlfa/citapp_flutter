@@ -47,7 +47,7 @@ class ClientesTable extends StatelessWidget {
                     ),
                   if (showEmailCol)
                     Expanded(flex: 3, child: Text('Email', style: headerStyle)),
-                  const SizedBox(width: 180),
+                  if (showEmailCol) const SizedBox(width: 180),
                 ],
               ),
             ),
@@ -70,120 +70,124 @@ class ClientesTable extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.grey.shade200),
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    // Cliente
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SelectableText(
-                            c.nombreCliente,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Cliente
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SelectableText(
+                                c.nombreCliente,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              if (showTelefonoInline) ...[
+                                const SizedBox(height: 4),
+                                SelectableText.rich(
+                                  maxLines: 1,
+
+                                  TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: 'Teléfono: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: c.telefonoCliente,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey.shade700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+
+                              if (showEmailInline) ...[
+                                const SizedBox(height: 2),
+                                SelectableText.rich(
+                                  maxLines: 1,
+
+                                  TextSpan(
+                                    children: [
+                                      const TextSpan(
+                                        text: 'Email: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: c.emailCliente,
+
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey.shade700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ],
                           ),
-                          if (showTelefonoInline) ...[
-                            const SizedBox(height: 4),
-                            SelectableText.rich(
-                              maxLines: 1,
+                        ),
 
-                              TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Teléfono: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: c.telefonoCliente,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
+                        if (showTelefonoCol)
+                          Expanded(flex: 2, child: Text(c.telefonoCliente)),
 
-                          if (showEmailInline) ...[
-                            const SizedBox(height: 2),
-                            SelectableText.rich(
-                              maxLines: 1,
+                        if (showEmailCol)
+                          Expanded(flex: 3, child: Text(c.emailCliente)),
 
-                              TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Email: ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: c.emailCliente,
-
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey.shade700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ],
-                      ),
+                        // Botones
+                      ],
                     ),
-
-                    if (showTelefonoCol)
-                      Expanded(flex: 2, child: Text(c.telefonoCliente)),
-
-                    if (showEmailCol)
-                      Expanded(flex: 3, child: Text(c.emailCliente)),
-
-                    // Botones
-                    SizedBox(
-                      width: 180,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1F6FEB),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                    SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1F6FEB),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 10,
                             ),
-                            onPressed: () => onEditar(c),
-                            child: const Text('Editar'),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFEF4444),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                            onPressed: () => onEliminar(c),
-                            child: const Text('Eliminar'),
                           ),
-                        ],
-                      ),
+                          onPressed: () => onEditar(c),
+                          child: const Text('Editar'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFEF4444),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          onPressed: () => onEliminar(c),
+                          child: const Text('Eliminar'),
+                        ),
+                      ],
                     ),
                   ],
                 ),

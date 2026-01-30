@@ -6,89 +6,139 @@ import 'package:universal_html/html.dart' as html;
 
 enum DashboardSection { clientes, citas }
 
-class DashboardShell extends StatelessWidget {
+class DashboardShell extends StatefulWidget {
   final DashboardSection section;
 
   const DashboardShell({super.key, required this.section});
 
+  @override
+  State<DashboardShell> createState() => _DashboardShellState();
+}
+
+class _DashboardShellState extends State<DashboardShell> {
+  bool _sidebarOpen = false;
+
   String get _title =>
-      section == DashboardSection.clientes
+      widget.section == DashboardSection.clientes
           ? 'Dashboard - Clientes'
           : 'Dashboard - Citas';
 
+  void _logout(BuildContext context) {
+    html.window.sessionStorage.remove('token');
+    context.go('/');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isCompact = width < 600;
+
+    final sidebar = _Sidebar(
+      selected: widget.section,
+      onGoClientes: () {
+        setState(() => _sidebarOpen = false);
+        context.go('/clientes');
+      },
+      onGoCitas: () {
+        setState(() => _sidebarOpen = false);
+        context.go('/citas');
+      },
+      onLogout: () {
+        setState(() => _sidebarOpen = false);
+        _logout(context);
+      },
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xFFE9EEF3),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(18),
-          child: Row(
+          child: Stack(
             children: [
-              _Sidebar(
-                selected: section,
-                onGoClientes: () => context.go('/clientes'),
-                onGoCitas: () => context.go('/citas'),
-                onLogout: () {
-                  html.window.sessionStorage.remove('token');
-                  context.go('/');
-                },
-              ),
-              const SizedBox(width: 18),
-
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 22,
-                        spreadRadius: 0,
-                        offset: Offset(0, 10),
-                        color: Color(0x22000000),
+              Row(
+                children: [
+                  if (!isCompact) ...[sidebar, const SizedBox(width: 18)],
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 22,
+                            spreadRadius: 0,
+                            offset: Offset(0, 10),
+                            color: Color(0x22000000),
+                          ),
+                        ],
                       ),
-                    ],
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 56,
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFF6F8FA),
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(10),
+                              ),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              children: [
+                                if (isCompact) ...[
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(8),
+                                    onTap:
+                                        () =>
+                                            setState(() => _sidebarOpen = true),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(6),
+                                      child: Icon(Icons.menu, size: 22),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                ],
+                                Text(
+                                  _title,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF2B2F36),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child:
+                                widget.section == DashboardSection.clientes
+                                    ? ClientesPanel()
+                                    : CitasPanel(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 56,
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF6F8FA),
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(10),
-                          ),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          _title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF2B2F36),
-                          ),
-                        ),
-                      ),
+                ],
+              ),
 
-                      /*Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(18),
-                          child: const _DashboardPlaceholder(),
-                        ),
-                      ),*/
-                      Expanded(
-                        child:
-                            section == DashboardSection.clientes
-                                ? ClientesPanel()
-                                : CitasPanel(),
-                      ),
-                    ],
+              // Sidebar overlay en compacto (<400)
+              if (isCompact && _sidebarOpen) ...[
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _sidebarOpen = false),
+                    child: Container(color: Colors.black38),
                   ),
                 ),
-              ),
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  child: Material(color: Colors.transparent, child: sidebar),
+                ),
+              ],
             ],
           ),
         ),
@@ -128,7 +178,6 @@ class _Sidebar extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 12),
-
           Padding(
             padding: const EdgeInsets.all(12),
             child: Image.asset(
@@ -138,13 +187,12 @@ class _Sidebar extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-
           const Divider(
             height: 0,
             thickness: 1,
             color: Color.fromARGB(76, 158, 158, 158),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           _NavItem(
             icon: Icons.group_outlined,
@@ -233,14 +281,5 @@ class _NavItem extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class LoginPagePlaceholder extends StatelessWidget {
-  const LoginPagePlaceholder({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text('LoginPage')));
   }
 }

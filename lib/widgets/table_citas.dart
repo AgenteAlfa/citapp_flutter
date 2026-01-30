@@ -50,7 +50,7 @@ class CitasTable extends StatelessWidget {
 
   Widget _estadoFooterBadge(EstadoCita e) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       color: _estadoBg(e),
       child: Center(
         child: Text(
@@ -82,7 +82,7 @@ class CitasTable extends StatelessWidget {
 
         return ListView(
           children: [
-            // HEADER (✅ quitamos "Estado")
+            // HEADER
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
@@ -111,7 +111,7 @@ class CitasTable extends StatelessWidget {
                     ),
                   if (showEmailCol)
                     Expanded(flex: 3, child: Text('Email', style: headerStyle)),
-                  const SizedBox(width: 180),
+                  if (showEmailCol) const SizedBox(width: 180),
                 ],
               ),
             ),
@@ -132,7 +132,6 @@ class CitasTable extends StatelessWidget {
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 6),
-
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
@@ -141,7 +140,7 @@ class CitasTable extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // ✅ Contenido principal en Row (como lo tenías)
+                    // CONTENIDO PRINCIPAL
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Row(
@@ -183,7 +182,7 @@ class CitasTable extends StatelessWidget {
                             ),
                           ),
 
-                          // CLIENTE + inline cuando se ocultan columnas
+                          // CLIENTE (+ inline si se ocultan columnas)
                           Expanded(
                             flex: 3,
                             child: Column(
@@ -252,46 +251,50 @@ class CitasTable extends StatelessWidget {
                             Expanded(flex: 2, child: Text(tel)),
                           if (showEmailCol)
                             Expanded(flex: 3, child: Text(email)),
+                        ],
+                      ),
+                    ),
 
-                          // BOTONES
-                          SizedBox(
-                            width: 180,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF1F6FEB),
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 10,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                  ),
-                                  onPressed: () => onEditar(c),
-                                  child: const Text('Editar'),
-                                ),
-                                const SizedBox(width: 8),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFFEF4444),
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 12,
-                                      vertical: 10,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                  ),
-                                  onPressed: () => onEliminar(c),
-                                  child: const Text('Eliminar'),
-                                ),
-                              ],
+                    // ✅ BOTONES ABAJO (como en ClientesTable)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        bottom: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF1F6FEB),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
                             ),
+                            onPressed: () => onEditar(c),
+                            child: const Text('Editar'),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFEF4444),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                            onPressed: () => onEliminar(c),
+                            child: const Text('Eliminar'),
                           ),
                         ],
                       ),
